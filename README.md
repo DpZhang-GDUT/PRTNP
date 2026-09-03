@@ -1,5 +1,7 @@
 # PRTNP
 
+Environment configuration details are provided in requirements.txt.
+
 ### CIFAR-10 under AutoAttack
 
 For evaluation on CIFAR-10 using AutoAttack with an $l_\infty$ perturbation budget of $\epsilon = 8/255$, run:
