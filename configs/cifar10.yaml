@@ -1,0 +1,34 @@
+base_config: configs/base_configs/cifar10-base_config.yaml
+
+data: cifar10 # {cifar10, cifar100, imagenet}
+
+attack: AA-linf # pipeline+{pgdeot, AA} to attack the whole pipeline sc_bpda
+clf: AT
+
+subset_size: 512 # number of test images
+num_iterations: 500
+
+seed: 2007
+
+init_reso: 8
+end_reso: 64
+
+iterations_for_upsampling:
+  - 100 # 256
+  - 200 # 512
+  - 300 # 1024
+
+max_rank: 8 
+ranks_for_upsampling:
+  - 12 #16
+  - 12 #10
+  - 12 #4
+
+wavelet_recon_min_targets: 0
+
+
+
+
+
+
+

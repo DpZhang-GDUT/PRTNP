@@ -1,0 +1,33 @@
+base_config: configs/base_configs/imagenet_base_config.yaml
+
+
+data: imagenet # {cifar10, cifar100, imagenet}
+attack: AA-linf # pipeline+{pgdeot, AA, BPDA} to attack the whole pipeline; clean; AA-linf; pgdeot; 
+clf: AT
+
+subset_size: 512 # number of test images
+num_iterations: 1000
+max_batch_size: 65536 # 256 ** 2
+
+seed: 2007
+
+init_reso: 16
+end_reso: 256
+
+
+iterations_for_upsampling:
+  - 100 #200
+  - 200 #500
+  - 400 #900
+  - 600 #1400
+
+max_rank: 16
+ranks_for_upsampling:
+  - 35 #32
+  - 35 #31
+  - 35 #30
+  - 35 #29
+
+wavelet_recon_min_targets: 1
+
+
