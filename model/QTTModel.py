@@ -385,22 +385,11 @@ class QTTModel(BaseTNModel):
         return total_variation_loss /self.num_compressed_params
 
     def compute_image_total_variation_loss(self, image, eps=1e-3):
-        """
-        计算图像的总变分损失
-        
-        Parameters:
-        - image: 重构的图像张量，形状为 [H, W, C]
-        
-        Returns:
-        图像的总变分损失
-        """
         if len(image.shape) == 3:  # [H, W, C] = [16, 16, 3]
-            # 计算水平方向的差分 (H, W-1, C)
             h_diff = torch.pow(image[:, 1:, :] - image[:, :-1, :], 2)
-            # 计算垂直方向的差分 (H-1, W, C)
             v_diff = torch.pow(image[1:, :, :] - image[:-1, :, :], 2)
 
-            tv_loss = torch.sqrt(torch.sum(h_diff) + torch.sum(v_diff) + eps**2)  # 添加小常数以避免除零错误
+            tv_loss = torch.sqrt(torch.sum(h_diff) + torch.sum(v_diff) + eps**2) 
 
         else:
             tv_loss = 0
@@ -542,11 +531,6 @@ class QTTModel(BaseTNModel):
         return reg_term
 
     def rank_from_discrepancy(self, X, delta2):
-        """
-        X: [H,W,C] 图像；在 H x (W*C) 上做一次 SVD
-        delta2: 允许的尾能量平方 (δ^2)
-        return: r_noise
-        """
         if X.dim() == 3: H, W, C = X.shape
         else: raise ValueError("expect [H,W,C]")
         M = X.reshape(H, W*C)                          # 也可用 (W, H*C)，等价
@@ -559,18 +543,13 @@ class QTTModel(BaseTNModel):
         return r
     
     def nuclear_norm_regularization(self, tn, weight=1e-4):
-        """
-        核范数正则化 - 最等价于TSVD降秩的约束
-        """
         total_nuclear_norm = 0
         for tensor in tn.tensors:
             data = tensor.data
             if len(data.shape) == 3:  # (r1, n, r2)
-                # 对于3D张量，可以按不同方式展开
                 matrix1 = data.reshape(data.shape[0], -1)  # (r1, n*r2)
                 matrix2 = data.reshape(-1, data.shape[-1])  # (r1*n, r2)
                 
-                # 对两个方向都施加核范数约束
                 nuclear_norm1 = torch.norm(matrix1, p='nuc')
                 nuclear_norm2 = torch.norm(matrix2, p='nuc')
                 total_nuclear_norm += (nuclear_norm1 + nuclear_norm2) / 2
@@ -616,20 +595,17 @@ class QTTModel(BaseTNModel):
 
         values_recon, reg_term = self.get_reconstructed_values(x)
 
-        # 在重构的差值施加TV约束
         if len(recon_targets) > 10: #and len(recon_targets) < 4
             values_recon_TVloss = self.compute_image_total_variation_loss(self.current_image)
             #print(f"TV loss: {values_recon_TVloss.item()}")
             loss += values_recon_TVloss * 1
 
-        # 小波阈值
         if len(recon_targets) > self.wavelet_recon_min_targets:
             l1_loss, _, _ = wavelet_l1_loss_hwc(self.current_image, normalize=True, per_channel=True)
             #loss += (0.000001*(len(recon_targets)+1)) * l1_loss
             loss += 0.000001 * l1_loss
 
 
-        # 在数据上加高斯噪声
         if len(recon_targets) > 10:  #and len(recon_targets) < 2
 
             std_d = self.downsampled_target.std(unbiased=False).clamp_min(1e-8)
@@ -641,7 +617,6 @@ class QTTModel(BaseTNModel):
         else:
             values_target = self.get_values_for_coords(self.downsampled_target, x)
 
-        # 核范数正则化 - 等价于TSVD降秩约束
         if len(recon_targets) > 10 and ite % 10 == 0:
             weight = 0.00005 * (len(recon_targets))**2
             nuclear_reg = self.nuclear_norm_regularization(self.tn, weight=weight)
