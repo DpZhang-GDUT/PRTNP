@@ -1,5 +1,9 @@
 # PRTNP
 
+### Paper
+Coarse-to-fine residual tensor network framework for test-time adversarial purification
+
+### Environment
 Environment configuration details are provided in requirements.txt.
 
 ### CIFAR-10 under AutoAttack
