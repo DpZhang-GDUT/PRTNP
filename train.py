@@ -24,7 +24,7 @@ from wavelet_soft_threshold import *
 
 import wandb
 import pickle
-os.environ["CUDA_VISIBLE_DEVICES"] = "9"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "9"
 
 
 torch.set_num_threads(20)
@@ -817,7 +817,7 @@ if __name__ == '__main__':
     if not os.path.exists(f'metrics/{args.clf}/{args.data}_{args.end_reso}/{model_name}-{args.attack}/'):
         os.makedirs(f'metrics/{args.clf}/{args.data}_{args.end_reso}/{model_name}-{args.attack}/')
 
-    if args.data == 'cifar10':
+    if args.data == 'rc_cifar10':
         x_test, y_test = load_cifar10(n_examples=args.subset_size)
         x_test = x_test.to(device)
         y_test = y_test.to(device)
@@ -826,8 +826,18 @@ if __name__ == '__main__':
         x_test = data['x'].to(device)
         y_test = data['y'].to(device)'''
 
-        # clf = load_model('Standard', dataset='cifar10').to(device)
         clf = load_model('Cui2023Decoupled_WRN-28-10', dataset='cifar10').to(device)
+
+    elif args.data == 'sc_cifar10':
+        x_test, y_test = load_cifar10(n_examples=args.subset_size)
+        x_test = x_test.to(device)
+        y_test = y_test.to(device)
+
+        '''data = torch.load("cifar10_split/part_29.pt")
+        x_test = data['x'].to(device)
+        y_test = data['y'].to(device)'''
+
+        clf = load_model('Standard', dataset='cifar10').to(device)
 
     elif args.data == 'cifar100':
         x_test, y_test = load_cifar100(n_examples=args.subset_size)
@@ -836,7 +846,7 @@ if __name__ == '__main__':
 
         clf = load_model('Cui2023Decoupled_WRN-28-10', dataset='cifar100').to(device)
     elif args.data == 'imagenet':
-        x_test, y_test = load_imagenet(n_examples=args.subset_size, data_dir='/home/dongping/reconstruction/datasets/ImageNet/data')
+        x_test, y_test = load_imagenet(n_examples=args.subset_size, data_dir='/home/dongping/PRTNP/datasets/ImageNet/data')
         x_test = x_test.to(device)
         y_test = y_test.to(device)
 
@@ -872,13 +882,16 @@ if __name__ == '__main__':
                 x_test_adv.append(adv)
             x_test_adv = torch.cat(x_test_adv, dim=0)'''
             if args.attack == 'AA-linf':
-                attacked = torch.load('adv/cifar10_32/AA-linf/512_8.pth')
+                if args.data == 'rc_cifar10':
+                    attacked = torch.load('adv/cifar10_32/AA-linf/rc_512_8.pth')
+                elif args.data == 'sc_cifar10':
+                    attacked = torch.load('adv/cifar10_32/AA-linf/sc_512_8.pth')
 
             x_test_adv = attacked['x_test_adv'].to(device)
             y_test = attacked['y_test'].to(device)
         elif args.data == 'imagenet':
             if args.attack == 'AA-linf':
-                attacked = torch.load('/home/dongping/reconstruction/adv/imagenet_256/AA-linf/512_4.pth')
+                attacked = torch.load('adv/imagenet_256/AA-linf/512_4.pth')
 
             x_test_adv = attacked['x_test_adv'].to(device)
             y_test = attacked['y_test'].to(device)
