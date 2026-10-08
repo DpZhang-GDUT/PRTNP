@@ -7,7 +7,7 @@ Coarse-to-fine residual tensor network framework for test-time adversarial purif
 Environment configuration details are provided in requirements.txt.
 
 ### Dataset
-The `adv/AA-linf/sc_cifar10` and `adv/AA-linf/rc_cifar10` datasets contain adversarial examples generated using AutoAttack against a standard classifier and a robust classifier, respectively.
+The `adv/cifar10_32/AA-linf/sc_512_8.pth` and `adv/cifar10_32/AA-linf/rc_cifar10` datasets contain adversarial examples generated using AutoAttack against a standard classifier and a robust classifier, respectively.
 
 The adversarial examples for ImageNet are available at the following link:
 https://huggingface.co/datasets/ZhangDongping/ImageNet-AutoAttack
