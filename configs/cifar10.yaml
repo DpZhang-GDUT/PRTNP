@@ -1,6 +1,6 @@
 base_config: configs/base_configs/cifar10-base_config.yaml
 
-data: cifar10 # {cifar10, cifar100, imagenet}
+data: rc_cifar10 # {cifar10, cifar100, imagenet}
 
 attack: AA-linf # pipeline+{pgdeot, AA} to attack the whole pipeline sc_bpda
 clf: AT
