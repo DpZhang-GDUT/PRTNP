@@ -14,10 +14,18 @@ https://huggingface.co/datasets/ZhangDongping/ImageNet-AutoAttack
 
 ### CIFAR-10 under AutoAttack
 
+## pipeline+standard classfier
 For evaluation on CIFAR-10 using AutoAttack with an $l_\infty$ perturbation budget of $\epsilon = 8/255$, run:
 
 ```bash
-python train.py --config configs/cifar10.yaml
+python train.py --config configs/sc_cifar10.yaml
+```
+
+## pipeline+robust classfier
+For evaluation on CIFAR-10 using AutoAttack with an $l_\infty$ perturbation budget of $\epsilon = 8/255$, run:
+
+```bash
+python train.py --config configs/rc_cifar10.yaml
 ```
 
 ### ImageNet under AutoAttack
