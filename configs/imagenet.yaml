@@ -16,17 +16,17 @@ end_reso: 256
 
 
 iterations_for_upsampling:
-  - 100 #200
-  - 200 #500
-  - 400 #900
-  - 600 #1400
+  - 100 
+  - 200 
+  - 400 
+  - 600 
 
 max_rank: 16
 ranks_for_upsampling:
-  - 35 #32
-  - 35 #31
-  - 35 #30
-  - 35 #29
+  - 35 
+  - 35 
+  - 35 
+  - 35 
 
 wavelet_recon_min_targets: 1
 
