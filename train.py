@@ -886,9 +886,12 @@ if __name__ == '__main__':
                     attacked = torch.load('adv/cifar10_32/AA-linf/rc_512_8.pth')
                 elif args.data == 'sc_cifar10':
                     attacked = torch.load('adv/cifar10_32/AA-linf/sc_512_8.pth')
+                elif args.data == 'cifar100':
+                    attacked = torch.load('/home/dongping/PRTNP/adv/cifar100_32/AA-linf/512_8.pth')
 
             x_test_adv = attacked['x_test_adv'].to(device)
             y_test = attacked['y_test'].to(device)
+
         elif args.data == 'imagenet':
             if args.attack == 'AA-linf':
                 attacked = torch.load('adv/imagenet_256/AA-linf/512_4.pth')
