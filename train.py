@@ -865,7 +865,7 @@ if __name__ == '__main__':
         elif args.attack in ['pgdeot']:
             if args.data == 'imagenet':
                 eps = 4/255
-            elif args.data in ['cifar10', 'cifar100']:
+            elif args.data in ['rc_cifar10', 'sc_cifar10', 'cifar100']:
                 eps = 8/255
             attack = torchattacks.EOTPGD(clf, eps=eps, alpha=2/255, steps=20, eot_iter=20)
         elif args.attack == 'clean':
@@ -873,7 +873,7 @@ if __name__ == '__main__':
         else:
             raise ValueError(f"Unsupported attack type: {args.attack}")
 
-        if args.data in ['cifar10', 'cifar100',]:
+        if args.data in ['rc_cifar10', 'cifar100', 'sc_cifar10']:
             '''testset = TensorDataset(x_test, y_test)
             testloader = DataLoader(testset, batch_size=64)
             x_test_adv = []
@@ -901,7 +901,7 @@ if __name__ == '__main__':
     # resize data
     if args.data == 'imagenet':
         x_test_adv = F.interpolate(x_test_adv, size=(args.end_reso, args.end_reso), mode='bilinear')
-    elif args.data in ['cifar10', 'cifar100']:
+    elif args.data in ['cifar10', 'cifar100', 'rc_cifar10', 'sc_cifar10']:
         x_test_adv = F.interpolate(x_test_adv, size=(args.end_reso, args.end_reso), mode='bilinear')
 
     x_rec = []
@@ -998,7 +998,7 @@ if __name__ == '__main__':
     # resize results to original size
     if args.data == 'imagenet':
         x_rec = F.interpolate(x_rec, size=(224, 224), mode='bilinear')
-    elif args.data in ['cifar10', 'cifar100']:
+    elif args.data in ['cifar10', 'cifar100', 'rc_cifar10', 'sc_cifar10']:
         x_rec = F.interpolate(x_rec, size=(32, 32), mode='bilinear')
 
     print(f"{args.data} {args.attack} accuracy", clean_accuracy(clf, x_rec, y_test)) 
