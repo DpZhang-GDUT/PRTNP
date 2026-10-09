@@ -846,7 +846,7 @@ if __name__ == '__main__':
 
         clf = load_model('Cui2023Decoupled_WRN-28-10', dataset='cifar100').to(device)
     elif args.data == 'imagenet':
-        x_test, y_test = load_imagenet(n_examples=args.subset_size, data_dir='/home/dongping/PRTNP/datasets/ImageNet/data')
+        x_test, y_test = load_imagenet(n_examples=args.subset_size, data_dir='datasets/ImageNet/data')
         x_test = x_test.to(device)
         y_test = y_test.to(device)
 
@@ -887,7 +887,7 @@ if __name__ == '__main__':
                 elif args.data == 'sc_cifar10':
                     attacked = torch.load('adv/cifar10_32/AA-linf/sc_512_8.pth')
                 elif args.data == 'cifar100':
-                    attacked = torch.load('/home/dongping/PRTNP/adv/cifar100_32/AA-linf/512_8.pth')
+                    attacked = torch.load('adv/cifar100_32/AA-linf/512_8.pth')
 
             x_test_adv = attacked['x_test_adv'].to(device)
             y_test = attacked['y_test'].to(device)
